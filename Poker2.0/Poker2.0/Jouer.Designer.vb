@@ -44,41 +44,51 @@ Partial Class Jouer
         '
         'pb_carte1
         '
+        Me.pb_carte1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pb_carte1.Location = New System.Drawing.Point(164, 182)
         Me.pb_carte1.Name = "pb_carte1"
         Me.pb_carte1.Size = New System.Drawing.Size(138, 201)
+        Me.pb_carte1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pb_carte1.TabIndex = 0
         Me.pb_carte1.TabStop = False
         '
         'pb_carte2
         '
+        Me.pb_carte2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pb_carte2.Location = New System.Drawing.Point(335, 182)
         Me.pb_carte2.Name = "pb_carte2"
         Me.pb_carte2.Size = New System.Drawing.Size(138, 201)
+        Me.pb_carte2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pb_carte2.TabIndex = 1
         Me.pb_carte2.TabStop = False
         '
         'pb_carte3
         '
+        Me.pb_carte3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pb_carte3.Location = New System.Drawing.Point(518, 182)
         Me.pb_carte3.Name = "pb_carte3"
         Me.pb_carte3.Size = New System.Drawing.Size(138, 201)
+        Me.pb_carte3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pb_carte3.TabIndex = 2
         Me.pb_carte3.TabStop = False
         '
         'pb_carte4
         '
+        Me.pb_carte4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pb_carte4.Location = New System.Drawing.Point(697, 182)
         Me.pb_carte4.Name = "pb_carte4"
         Me.pb_carte4.Size = New System.Drawing.Size(138, 201)
+        Me.pb_carte4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pb_carte4.TabIndex = 3
         Me.pb_carte4.TabStop = False
         '
         'pb_carte5
         '
+        Me.pb_carte5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pb_carte5.Location = New System.Drawing.Point(872, 182)
         Me.pb_carte5.Name = "pb_carte5"
         Me.pb_carte5.Size = New System.Drawing.Size(138, 201)
+        Me.pb_carte5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pb_carte5.TabIndex = 4
         Me.pb_carte5.TabStop = False
         '

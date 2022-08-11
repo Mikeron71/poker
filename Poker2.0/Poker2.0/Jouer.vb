@@ -1,34 +1,46 @@
 ﻿Partial Public Class Jouer
 
-    Public nomJoueur As String
-    Public nbJoueurs As Integer
-    Public credits As Integer
+    Public paquet = CreerPaquet()
+    Dim Joueurs As New List(Of Player)
 
 
 
-    Private rnd As New Random()
+    Public Sub AfficherMain()
+
+        pb_carte2.Image = Global.Poker2._0.My.Resources.Resources.C14
+    End Sub
+
+
 
     Public Sub Shuffle(carte As List(Of Carte))
+        Dim rnd As New Random()
         Dim rando As Integer
         Dim temp As Carte
 
         For n As Integer = 52 - 1 To 0 Step -1
-            rando = rnd.Next(0, n + 1)
+            rando = Rnd.Next(0, n + 1)
             temp = carte(n)
             carte(n) = carte(rando)
             carte(rando) = temp
         Next n
     End Sub
 
+    Public Sub CreerJoueurs(nb As Integer)
+
+        For n As Integer = 1 To nb
+            Dim player As New Player(nb)
+            Debug.Write(player.numero)
+            Joueurs.Add(player)
+        Next
+
+
+
+    End Sub
 
 
     Public Function CreerPaquet()
 
         Dim paquet = New List(Of Carte)
-
-
-
-
 
 
         For index As Integer = 2 To 14
@@ -47,8 +59,6 @@
             carte.id = index
             carte.categorie = "K"
             paquet.Add(carte)
-
-
 
 
         Next
@@ -87,9 +97,15 @@
 
     End Function
 
-    Private Sub btn_jouer_Click(sender As Object, e As EventArgs) Handles btn_jouer.Click
-        Dim paquet = CreerPaquet()
+    Public Sub btn_jouer_Click(sender As Object, e As EventArgs) Handles btn_jouer.Click
 
+        paquet = CreerPaquet()
+        CreerJoueurs(Form1.nbJoueurs)
+
+        For Each play In Joueurs
+            Valider(play.main)
+        Next
+        AfficherMain()
 
         'MainTEST-----------------------------------
 
@@ -117,10 +133,35 @@
         Next
 
 
-        For Each carte In mainJoueur
-            Debug.Write(carte.id)
-            Debug.WriteLine(carte.categorie)
+        'For Each carte In mainJoueur
+        '    Debug.Write(carte.id)
+        '    Debug.WriteLine(carte.categorie)
+        'Next
+
+
+
+
+        Dim mainPc As New List(Of Carte)
+        For index As Integer = 2 To Form1.nbJoueurs
+
+            For i As Integer = 0 To 4
+                Dim carte = paquet(0)
+                mainPc.Add(carte)
+                paquet.RemoveAt(0)
+            Next
+
         Next
+
+
+        'For Each carte In mainPc
+        '    Debug.Write("PCPCPCPCPCPC" + carte.id)
+        '    Debug.WriteLine(carte.categorie)
+        'Next
+
+
+
+
+
 
 
 

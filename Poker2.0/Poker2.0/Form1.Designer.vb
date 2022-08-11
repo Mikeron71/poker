@@ -51,7 +51,7 @@ Partial Class Form1
         'nud_nbJoueurs
         '
         Me.nud_nbJoueurs.Location = New System.Drawing.Point(779, 378)
-        Me.nud_nbJoueurs.Maximum = New Decimal(New Integer() {4, 0, 0, 0})
+        Me.nud_nbJoueurs.Maximum = New Decimal(New Integer() {3, 0, 0, 0})
         Me.nud_nbJoueurs.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.nud_nbJoueurs.Name = "nud_nbJoueurs"
         Me.nud_nbJoueurs.Size = New System.Drawing.Size(120, 23)
@@ -72,9 +72,9 @@ Partial Class Form1
         Me.lb_nbJoueurs.AutoSize = True
         Me.lb_nbJoueurs.Location = New System.Drawing.Point(542, 380)
         Me.lb_nbJoueurs.Name = "lb_nbJoueurs"
-        Me.lb_nbJoueurs.Size = New System.Drawing.Size(176, 15)
+        Me.lb_nbJoueurs.Size = New System.Drawing.Size(189, 15)
         Me.lb_nbJoueurs.TabIndex = 4
-        Me.lb_nbJoueurs.Text = "Choisissez le nombre de joueurs"
+        Me.lb_nbJoueurs.Text = "Choisissez le nombre d'adversaires"
         '
         'btn_lancer
         '
