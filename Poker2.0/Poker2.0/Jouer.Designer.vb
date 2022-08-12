@@ -35,6 +35,8 @@ Partial Class Jouer
         Me.cb_carte4 = New System.Windows.Forms.CheckBox()
         Me.cb_carte5 = New System.Windows.Forms.CheckBox()
         Me.btn_jouer = New System.Windows.Forms.Button()
+        Me.btn_remplacer = New System.Windows.Forms.Button()
+        Me.btn_verifier = New System.Windows.Forms.Button()
         CType(Me.pb_carte1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pb_carte2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pb_carte3, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -169,11 +171,31 @@ Partial Class Jouer
         Me.btn_jouer.Text = "jouer"
         Me.btn_jouer.UseVisualStyleBackColor = True
         '
+        'btn_remplacer
+        '
+        Me.btn_remplacer.Location = New System.Drawing.Point(742, 534)
+        Me.btn_remplacer.Name = "btn_remplacer"
+        Me.btn_remplacer.Size = New System.Drawing.Size(75, 23)
+        Me.btn_remplacer.TabIndex = 13
+        Me.btn_remplacer.Text = "remplacer cartes"
+        Me.btn_remplacer.UseVisualStyleBackColor = True
+        '
+        'btn_verifier
+        '
+        Me.btn_verifier.Location = New System.Drawing.Point(830, 634)
+        Me.btn_verifier.Name = "btn_verifier"
+        Me.btn_verifier.Size = New System.Drawing.Size(75, 23)
+        Me.btn_verifier.TabIndex = 14
+        Me.btn_verifier.Text = "verifier"
+        Me.btn_verifier.UseVisualStyleBackColor = True
+        '
         'Jouer
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1212, 850)
+        Me.Controls.Add(Me.btn_verifier)
+        Me.Controls.Add(Me.btn_remplacer)
         Me.Controls.Add(Me.btn_jouer)
         Me.Controls.Add(Me.cb_carte5)
         Me.Controls.Add(Me.cb_carte4)
@@ -212,4 +234,6 @@ Partial Class Jouer
     Friend WithEvents cb_carte4 As CheckBox
     Friend WithEvents cb_carte5 As CheckBox
     Friend WithEvents btn_jouer As Button
+    Friend WithEvents btn_remplacer As Button
+    Friend WithEvents btn_verifier As Button
 End Class
