@@ -5,6 +5,8 @@
 
     Public main As New List(Of Carte)
 
+    Public typeMain As String
+
 
 
 
