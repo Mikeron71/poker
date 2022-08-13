@@ -1,15 +1,16 @@
 ﻿Public Class Form1
 
-    Public nomJoueur As String
     Public nbJoueurs As Integer
 
 
 
     Private Sub btn_lancer_Click(sender As Object, e As EventArgs) Handles btn_lancer.Click
         Jouer.Show()
-        nbJoueurs = nud_nbJoueurs.Value
-        nomJoueur = tb_nom.Text
         Me.Hide()
 
+    End Sub
+
+    Private Sub nud_nbJoueurs_ValueChanged(sender As Object, e As EventArgs) Handles nud_nbJoueurs.ValueChanged
+        nbJoueurs = nud_nbJoueurs.Value
     End Sub
 End Class

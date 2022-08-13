@@ -1,18 +1,20 @@
 ﻿Partial Public Class Jouer
 
     Public paquet As New List(Of Carte)
-    Dim adversaires As New List(Of Player)
-    Dim mainJoueur As New List(Of Carte)
+    Dim joueurs As New List(Of Player)
     Dim msgWin As String
     Dim mise As Integer
     Dim credits As Integer = 20
+    Dim resultat As String = ""
+    Dim winner As Boolean = False
+    Dim valeurBase As Integer
 
-
-    Private Sub Jouer_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Public Sub Jouer_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ModeMise()
         UpdateCredits()
         paquet = CreerPaquet()
-
+        CreerJoueurs(Form1.nbJoueurs)
+        tb_win.Text = "Pour débuter, placez votre mise"
 
     End Sub
 
@@ -32,24 +34,13 @@
 
 
 
-    Public Shared Sub Shuffle(carte As List(Of Carte))
-        Dim rnd As New Random()
-        Dim rando As Integer
-        Dim temp As Carte
 
-        For n As Integer = 52 - 1 To 0 Step -1
-            rando = rnd.Next(0, n + 1)
-            temp = carte(n)
-            carte(n) = carte(rando)
-            carte(rando) = temp
-        Next n
-    End Sub
 
-    Public Sub CreerJoueurs(nb As Integer)
+    Public Sub CreerJoueurs(combien As Integer)
 
-        For n As Integer = 1 To nb
-            Dim player As New Player(nb)
-            adversaires.Add(player)
+        For n As Integer = 0 To combien
+            Dim player As New Player()
+            joueurs.Add(player)
         Next
 
 
@@ -58,125 +49,61 @@
 
 
     Public Function CreerPaquet()
-
         Dim paquet = New List(Of Carte)
-
 
         For index As Integer = 2 To 14
             Dim carte = New Carte(0, "")
-
             carte.id = index
             carte.categorie = "C"
             paquet.Add(carte)
-
-
         Next
 
         For index As Integer = 2 To 14
             Dim carte = New Carte(0, "")
-
             carte.id = index
             carte.categorie = "K"
             paquet.Add(carte)
-
-
         Next
 
         For index As Integer = 2 To 14
             Dim carte = New Carte(0, "")
-
             carte.id = index
             carte.categorie = "T"
             paquet.Add(carte)
-
         Next
 
         For index As Integer = 2 To 14
             Dim carte = New Carte(0, "")
-
             carte.id = index
             carte.categorie = "P"
             paquet.Add(carte)
-
-
         Next
-
-
         Shuffle(paquet)
-
-
-
-        'For Each carte In paquet
-        '    Debug.Write(carte.id)
-        '    Debug.WriteLine(carte.categorie)
-        'Next
-
-
         Return paquet
 
     End Function
 
     Public Sub btn_jouer_Click(sender As Object, e As EventArgs) Handles btn_jouer.Click
+        paquet = CreerPaquet()
         tb_win.Visible = False
-        mainJoueur.Clear()
-
-        CreerJoueurs(Form1.nbJoueurs)
         btn_jouer.Enabled = False
         btn_remplacer.Enabled = True
+        pan_mise.Enabled = False
 
-
-
-        'MainTEST-----------------------------------
-
-        Dim mainTest As New List(Of Carte)
-        Dim ctest1 = New Carte(10, "T")
-        Dim ctest2 = New Carte(10, "k")
-        Dim ctest3 = New Carte(10, "T")
-        Dim ctest4 = New Carte(9, "T")
-        Dim ctest5 = New Carte(9, "T")
-
-        mainTest.Add(ctest1)
-        mainTest.Add(ctest2)
-        mainTest.Add(ctest3)
-        mainTest.Add(ctest4)
-        mainTest.Add(ctest5)
-
-        'Valider(mainTest)
-
-
-
-        For index As Integer = 0 To 4
-            Dim carte = paquet(0)
-            mainJoueur.Add(carte)
-            paquet.RemoveAt(0)
-        Next
-
-
-        'For Each carte In mainJoueur
-        '    Debug.Write(carte.id)
-        '    Debug.WriteLine(carte.categorie)
-        'Next
-        'AfficherMain(mainJoueur)
-
-
-
-
-        For index As Integer = 0 To Form1.nbJoueurs - 1
-            Dim mainPc As New List(Of Carte)
+        For index As Integer = 0 To Form1.nbJoueurs
+            Dim mainACreer As New List(Of Carte)
 
             For i As Integer = 0 To 4
                 Dim carte = paquet(0)
-                'Debug.Write(carte.id)
-                'Debug.Write(carte.categorie)
-                mainPc.Add(carte)
+                mainACreer.Add(carte)
                 paquet.RemoveAt(0)
             Next
-            adversaires(index).main = mainPc
+            joueurs(index).main = mainACreer
         Next
 
 
 
-        AfficherMain(mainJoueur)
+        AfficherMain(joueurs(0).main)
         btn_remplacer.Enabled = True
         pan_remplacer.Visible = True
         btn_verifier.Enabled = True
@@ -184,18 +111,18 @@
     End Sub
 
 
-    Public Function Valider(main As List(Of Carte)) As Integer
+    Public Sub ValiderMain(joueur)
 
-        Dim points As Integer = 0
+        joueur.points = 0
+        Dim main As List(Of Carte) = joueur.main
 
         '' VERIFIER FLUSH 
         Dim flush As Boolean = False
 
         If main(0).categorie = main(1).categorie And main(1).categorie = main(2).categorie And main(2).categorie = main(3).categorie And main(3).categorie = main(4).categorie Then
             flush = True
-            msgWin = "Une flush"
-
-            points = 60
+            joueur.points = 60
+            joueur.typeMain = "flush"
         End If
 
 
@@ -219,8 +146,8 @@
             cartestries(4).id = 14 And cartestries(0).id = 2 And cartestries(1).id = 3 And cartestries(2).id = 4 And cartestries(3).id = 5 Then
             straight = True
 
-            msgWin = "une quinte"
-            points = 50
+            joueur.typeMain = "quinte"
+            joueur.points = 50
         End If
 
 
@@ -228,15 +155,17 @@
         'STRAIGHT FLUSH
         If straight = True And flush = True Then
             straightflush = True
-            msgWin = "une quinte flush"
-            points = 90
+            joueur.typeMain = "quinte flush"
+
+            joueur.points = 90
         End If
 
         'ROYAL FLUSH
         If straightflush = True And cartestries(4).id = 14 And cartestries(3).id = 13 And flush = True Then
             royalflush = True
-            msgWin = "une quinte flush royale"
-            points = 100
+            joueur.typeMain = "quinte flush royale"
+
+            joueur.points = 100
 
         End If
 
@@ -253,11 +182,11 @@
             i = i + 1
 
             If byGroup = 4 Then
-                msgWin = "un carré"
-                points = 80
+                joueur.typeMain = "carré"
+                joueur.points = 80
             ElseIf byGroup = 3 Then
-                msgWin = "un brelan"
-                points = 40
+                joueur.typeMain = "brelan"
+                joueur.points = 40
                 threeoak = True
             ElseIf byGroup = 2 Then
                 pairCount = pairCount + 1
@@ -265,160 +194,96 @@
 
         Next
         If pairCount = 2 Then
-            msgWin = "deux paires"
-            points = 30
-
+            joueur.typeMain = "deux paires"
+            joueur.points = 30
         ElseIf pairCount = 1 Then
-            msgWin = "une paire"
+            joueur.typeMain = "paire"
             pair = True
-            points = 20
+            joueur.points = 20
         End If
 
 
         'FULLHOUSE 
         If threeoak = True And pair = True Then
-
-            msgWin = "une full"
-            points = 70
+            joueur.typeMain = "full"
+            joueur.points = 70
         End If
 
 
-        If points = 0 Then
-            points = cartestries(4).id
-            msgWin = " une carte haute"
-
+        If joueur.points = 0 Then
+            joueur.points = cartestries(4).id
+            joueur.typeMain = "carte haute"
         End If
 
-        Return points
 
-    End Function
+
+    End Sub
 
     Private Sub btn_remplacer_Click(sender As Object, e As EventArgs) Handles btn_remplacer.Click
         If cb_carte1.Checked = True Then
-            mainJoueur(0) = paquet(0)
+            joueurs(0).main(0) = paquet(0)
             paquet.RemoveAt(0)
-            AfficherMain(mainJoueur)
+            AfficherMain(joueurs(0).main)
         End If
 
         If cb_carte2.Checked = True Then
-            mainJoueur(1) = paquet(0)
+            joueurs(0).main(1) = paquet(0)
             paquet.RemoveAt(0)
-            AfficherMain(mainJoueur)
+            AfficherMain(joueurs(0).main)
         End If
         If cb_carte3.Checked = True Then
-            mainJoueur(2) = paquet(0)
+            joueurs(0).main(2) = paquet(0)
             paquet.RemoveAt(0)
-            AfficherMain(mainJoueur)
+            AfficherMain(joueurs(0).main)
         End If
         If cb_carte4.Checked = True Then
-            mainJoueur(3) = paquet(0)
+            joueurs(0).main(3) = paquet(0)
             paquet.RemoveAt(0)
-            AfficherMain(mainJoueur)
+            AfficherMain(joueurs(0).main)
         End If
         If cb_carte5.Checked = True Then
-            mainJoueur(4) = paquet(0)
+            joueurs(0).main(4) = paquet(0)
             paquet.RemoveAt(0)
-            AfficherMain(mainJoueur)
+            AfficherMain(joueurs(0).main)
         End If
         btn_remplacer.Enabled = False
     End Sub
 
     Private Sub btn_verifier_Click(sender As Object, e As EventArgs) Handles btn_verifier.Click
-        Dim ptsPlayer As Integer = Valider(mainJoueur)
+
+        winner = False
         Dim pointsAdversaires As New List(Of Integer)
         clearTb()
 
-
-
-
         '' TEMPORAIRE >>> VERIFICATION MAIN ET SCORE
 
-        For Each pc In adversaires
-            Debug.Write(pc.main(0).categorie)
-            Debug.WriteLine(pc.main(0).id)
-            Debug.Write(pc.main(1).categorie)
-            Debug.WriteLine(pc.main(1).id)
-            Debug.Write(pc.main(2).categorie)
-            Debug.WriteLine(pc.main(2).id)
-            Debug.Write(pc.main(3).categorie)
-            Debug.WriteLine(pc.main(3).id)
-            Debug.Write(pc.main(4).categorie)
-            Debug.WriteLine(pc.main(4).id)
+        For Each joueur In joueurs
+
+            ValiderMain(joueur)
+            Debug.Write(joueur.main(0).categorie)
+            Debug.WriteLine(joueur.main(0).id)
+            Debug.Write(joueur.main(1).categorie)
+            Debug.WriteLine(joueur.main(1).id)
+            Debug.Write(joueur.main(2).categorie)
+            Debug.WriteLine(joueur.main(2).id)
+            Debug.Write(joueur.main(3).categorie)
+            Debug.WriteLine(joueur.main(3).id)
+            Debug.Write(joueur.main(4).categorie)
+            Debug.WriteLine(joueur.main(4).id)
 
 
-            Dim score = Valider(pc.main)
+            Debug.WriteLine(joueur.points)
+            Debug.WriteLine(joueur.typeMain)
 
-            Select Case score
-                Case 1 To 14
-                    pc.typeMain = "carte haute"
-                Case 20
-                    pc.typeMain = "paire"
-                Case 30
-                    pc.typeMain = "deux paire"
-                Case 40
-                    pc.typeMain = "brelan"
-                Case 50
-                    pc.typeMain = "quinte"
-                Case 60
-                    pc.typeMain = "flush"
-                Case 70
-                    pc.typeMain = "full"
-                Case 80
-                    pc.typeMain = "carré"
-                Case 90
-                    pc.typeMain = "quinte flush"
-                Case 100
-                    pc.typeMain = "quinte flush royale"
-
-            End Select
-
-
-
-            pointsAdversaires.Add(score)
-            Debug.Write("score ==")
-            Debug.WriteLine(score)
-            Debug.WriteLine("")
 
         Next
 
-        tb_pc1.Text = "Main pc1: " + adversaires(0).typeMain
-        tb_pc1.Visible = True
-        If Form1.nbJoueurs > 1 Then
-            tb_pc2.Visible = True
-            tb_pc2.Text = "Main pc2: " + adversaires(1).typeMain
-        End If
-        If Form1.nbJoueurs > 2 Then
-            tb_pc3.Visible = True
-            tb_pc3.Text = "Main pc2: " + adversaires(2).typeMain
-        End If
 
 
-
-
-        Debug.WriteLine("Points du joueur 1 ==")
-        Debug.WriteLine(ptsPlayer)
-
-        pointsAdversaires.Sort()
-        Dim highScore = pointsAdversaires(Form1.nbJoueurs - 1)
-        Debug.Write("high score = ")
-        Debug.WriteLine(highScore)
-        tb_win.Visible = True
-
-        If ptsPlayer > highScore Then
-            tb_win.Text = "Vous gagnez"
-            Debug.WriteLine("PLAYER WIN")
-        ElseIf ptsPlayer = highScore Then
-            Debug.WriteLine("Egalite")
-            tb_win.Text = "Égalité"
-
-        Else
-            Debug.WriteLine("PERDU")
-            tb_win.Text = "Vous avez  perdu"
-
-
-        End If
 
         btn_jouer.Enabled = True
+        VerifierGagnant()
+        ModeMise()
     End Sub
 
     Public Sub clearTb()
@@ -431,25 +296,42 @@
 
 
     Private Sub ModeMise()
-        tb_win.Text = "Faites votre mise"
+        nud_mise.Value = 1
+        pan_mise.Enabled = True
         tb_win.Visible = True
-
+        btn_jouer.Enabled = False
+        btn_remplacer.Enabled = False
+        btn_verifier.Enabled = False
+        btn_miser.Enabled = True
+        nud_mise.Enabled = True
+        btn_modifier.Enabled = False
 
     End Sub
 
     Private Sub UpdateCredits()
+
         lb_creditData.Text = credits.ToString()
     End Sub
 
-    Private Sub btn_miser_Click(sender As Object, e As EventArgs) Handles btn_miser.Click
+    Private Function btn_miser_Click(sender As Object, e As EventArgs) Handles btn_miser.Click
+        tb_win.Text = ""
         mise = nud_mise.Value
-        nud_mise.Enabled = False
-        btn_miser.Enabled = False
-        credits = credits - mise
-        btn_modifier.Enabled = True
-        btn_jouer.Enabled = True
-        UpdateCredits()
-    End Sub
+        If mise > credits Then
+            MessageBox.Show("vous ne pouvez pas miser plus que votre nombre de crédits")
+            Return Nothing
+        Else
+
+            nud_mise.Enabled = False
+            btn_miser.Enabled = False
+            credits = credits - mise
+            btn_modifier.Enabled = True
+            btn_jouer.Enabled = True
+            UpdateCredits()
+        End If
+
+
+
+    End Function
 
     Private Sub btn_modifier_Click(sender As Object, e As EventArgs) Handles btn_modifier.Click
         nud_mise.Enabled = False
@@ -459,5 +341,112 @@
         btn_jouer.Enabled = False
         credits = credits + mise
         UpdateCredits()
+    End Sub
+
+    Public Shared Sub Shuffle(carte As List(Of Carte))
+        Dim rnd As New Random()
+        Dim rando As Integer
+        Dim temp As Carte
+
+        For n As Integer = 52 - 1 To 0 Step -1
+            rando = rnd.Next(0, n + 1)
+            temp = carte(n)
+            carte(n) = carte(rando)
+            carte(rando) = temp
+        Next n
+    End Sub
+
+
+
+    Public Sub VerifierGagnant()
+
+        Dim listPoints As New List(Of Integer)
+        Dim pt1 = joueurs(0).points
+
+        For i As Integer = 1 To Form1.nbJoueurs
+            listPoints.Add(joueurs(i).points)
+        Next
+
+        listPoints.Sort()
+
+        If pt1 > listPoints.Last() Then
+            resultat = "Gagnant"
+            winner = True
+        ElseIf pt1 = listPoints.Last Then
+            resultat = "Partie nulle"
+            credits = credits + mise
+        Else
+            resultat = "Partie perdue"
+        End If
+
+        tb_win.Text = resultat
+        tb_win.Visible = True
+        CalculerPoint()
+        AfficherResultats()
+        UpdateCredits()
+
+        If credits = 0 Then
+
+            MessageBox.Show("TES PAUVRE")
+
+        End If
+
+
+
+    End Sub
+
+    Public Sub CalculerPoint()
+        If winner = True Then
+            Dim type = joueurs(0).typeMain
+
+
+            Select Case type
+                Case "carte haute"
+                    credits = credits + (mise * 2)
+                Case "paire"
+                    credits = credits + (mise * 3)
+                Case "deux paires"
+                    credits = credits + (mise * 5)
+                Case "brelan"
+                    credits = credits + (mise * 10)
+                Case "quinte"
+                    credits = credits + (mise * 15)
+                Case "couleur"
+                    credits = credits + (mise * 20)
+                Case "full"
+                    credits = credits + (mise * 25)
+                Case "carré"
+                    credits = credits + (mise * 50)
+                Case "quinte flush"
+                    credits = credits + (mise * 75)
+                Case "quinte flush royale"
+                    credits = credits + (mise * 100)
+            End Select
+
+
+            UpdateCredits()
+
+
+
+        End If
+    End Sub
+
+
+    Private Sub AfficherResultats()
+        tb_pc1.Text = "Adversaire 1: " + joueurs(1).typeMain
+        tb_pc1.Visible = True
+        If Form1.nbJoueurs > 1 Then
+            tb_pc2.Visible = True
+            tb_pc2.Text = "Adversaire 2: " + joueurs(2).typeMain
+        End If
+        If Form1.nbJoueurs > 2 Then
+            tb_pc3.Visible = True
+            tb_pc3.Text = "Adversaire 3: " + joueurs(3).typeMain
+        End If
+
+        tb_votreMain.Text = "Votre main :" + joueurs(0).typeMain
+
+        Debug.WriteLine("Points du joueur 1 ==")
+        Debug.WriteLine(joueurs(0).points)
     End Sub
 End Class
