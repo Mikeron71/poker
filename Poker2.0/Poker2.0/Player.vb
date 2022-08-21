@@ -1,7 +1,5 @@
 ﻿Public Class Player
 
-
-
     Public main As New List(Of Carte)
     Public typeMain As String
     Public points As Integer
@@ -14,9 +12,5 @@
             Jouer.paquet.RemoveAt(0)
         Next
     End Sub
-
-
-
-
 
 End Class

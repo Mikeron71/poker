@@ -32,18 +32,12 @@
         pb_carte5.Image = Image.FromFile("..\..\..\images\" + carte5 + ".jpg")
     End Sub
 
-
-
-
-
     Public Sub CreerJoueurs(combien As Integer)
 
         For n As Integer = 0 To combien
             Dim player As New Player()
             joueurs.Add(player)
         Next
-
-
 
     End Sub
 
@@ -101,15 +95,12 @@
             joueurs(index).main = mainACreer
         Next
 
-
-
         AfficherMain(joueurs(0).main)
         btn_remplacer.Enabled = True
         pan_remplacer.Visible = True
         btn_verifier.Enabled = True
 
     End Sub
-
 
     Public Sub ValiderMain(joueur)
 
@@ -124,8 +115,6 @@
             joueur.points = 60
             joueur.typeMain = "flush"
         End If
-
-
 
         '' VERIFIER STRAIGHT 
         Dim straight As Boolean = False
@@ -215,8 +204,6 @@
             joueur.typeMain = "carte haute"
         End If
 
-
-
     End Sub
 
     Private Sub btn_remplacer_Click(sender As Object, e As EventArgs) Handles btn_remplacer.Click
@@ -247,6 +234,10 @@
             AfficherMain(joueurs(0).main)
         End If
         btn_remplacer.Enabled = False
+        For Each cb In pan_remplacer.Controls
+            cb.checked = False
+
+        Next
     End Sub
 
     Private Sub btn_verifier_Click(sender As Object, e As EventArgs) Handles btn_verifier.Click
@@ -254,33 +245,6 @@
         winner = False
         Dim pointsAdversaires As New List(Of Integer)
         clearTb()
-
-        '' TEMPORAIRE >>> VERIFICATION MAIN ET SCORE
-
-        For Each joueur In joueurs
-
-            ValiderMain(joueur)
-            Debug.Write(joueur.main(0).categorie)
-            Debug.WriteLine(joueur.main(0).id)
-            Debug.Write(joueur.main(1).categorie)
-            Debug.WriteLine(joueur.main(1).id)
-            Debug.Write(joueur.main(2).categorie)
-            Debug.WriteLine(joueur.main(2).id)
-            Debug.Write(joueur.main(3).categorie)
-            Debug.WriteLine(joueur.main(3).id)
-            Debug.Write(joueur.main(4).categorie)
-            Debug.WriteLine(joueur.main(4).id)
-
-
-            Debug.WriteLine(joueur.points)
-            Debug.WriteLine(joueur.typeMain)
-
-
-        Next
-
-
-
-
         btn_jouer.Enabled = True
         VerifierGagnant()
         ModeMise()
@@ -290,6 +254,7 @@
         tb_pc1.Clear()
         tb_pc2.Clear()
         tb_pc3.Clear()
+        tb_votreMain.Clear()
     End Sub
 
 
@@ -314,7 +279,8 @@
     End Sub
 
     Private Function btn_miser_Click(sender As Object, e As EventArgs) Handles btn_miser.Click
-        tb_win.Text = ""
+        clearTb()
+
         mise = nud_mise.Value
         If mise > credits Then
             MessageBox.Show("vous ne pouvez pas miser plus que votre nombre de crédits")
@@ -398,8 +364,6 @@
     Public Sub CalculerPoint()
         If winner = True Then
             Dim type = joueurs(0).typeMain
-
-
             Select Case type
                 Case "carte haute"
                     credits = credits + (mise * 2)
@@ -422,11 +386,7 @@
                 Case "quinte flush royale"
                     credits = credits + (mise * 100)
             End Select
-
-
             UpdateCredits()
-
-
 
         End If
     End Sub
@@ -445,7 +405,6 @@
         End If
 
         tb_votreMain.Text = "Votre main :" + joueurs(0).typeMain
-
         Debug.WriteLine("Points du joueur 1 ==")
         Debug.WriteLine(joueurs(0).points)
     End Sub
