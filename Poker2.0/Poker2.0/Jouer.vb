@@ -15,7 +15,6 @@
         paquet = CreerPaquet()
         CreerJoueurs(Form1.nbJoueurs)
         tb_win.Text = "Pour débuter, placez votre mise"
-
     End Sub
 
     Public Sub AfficherMain(main)
@@ -242,7 +241,11 @@
 
     Private Sub btn_verifier_Click(sender As Object, e As EventArgs) Handles btn_verifier.Click
 
-        winner = False
+        For Each joueur In joueurs
+
+            ValiderMain(joueur)
+            winner = False
+        Next
         Dim pointsAdversaires As New List(Of Integer)
         clearTb()
         btn_jouer.Enabled = True
@@ -356,8 +359,6 @@
             MessageBox.Show("TES PAUVRE")
 
         End If
-
-
 
     End Sub
 
